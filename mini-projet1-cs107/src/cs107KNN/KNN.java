@@ -25,7 +25,6 @@ public class KNN {
 	 * @return the integer having form [ b31ToB24 | b23ToB16 | b15ToB8 | b7ToB0 ]
 	 */
 	public static int extractInt(byte b31ToB24, byte b23ToB16, byte b15ToB8, byte b7ToB0) {
-		// TODO: Implémenter
 		int ans = b31ToB24 << 24;
 		ans += b23ToB16 << 16;
 		ans += b15ToB8 << 8;
@@ -53,8 +52,15 @@ public class KNN {
 	 * @return the parsed labels
 	 */
 	public static byte[] parseIDXlabels(byte[] data) {
-		// TODO: Implémenter
-		return null;
+		if (extractInt(data[0], data[1], data[2], data[3]) != 2049)
+			return null;
+
+		int nbLabels = extractInt(data[4], data[5], data[6], data[7]);
+		byte[] labels = new byte[nbLabels];
+		for (int i = 0; i < nbLabels; ++i) {
+			labels[i] = data[i + 7];
+		}
+		return labels;
 	}
 
 	/**
