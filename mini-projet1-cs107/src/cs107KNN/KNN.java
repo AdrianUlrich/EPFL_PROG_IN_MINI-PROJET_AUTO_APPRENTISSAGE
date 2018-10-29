@@ -25,8 +25,11 @@ public class KNN {
 	 * @return the integer having form [ b31ToB24 | b23ToB16 | b15ToB8 | b7ToB0 ]
 	 */
 	public static int extractInt(byte b31ToB24, byte b23ToB16, byte b15ToB8, byte b7ToB0) {
-		// TODO: Implémenter
-		return 0;
+		int ans = b31ToB24 << 24;
+		ans += b23ToB16 << 16;
+		ans += b15ToB8 << 8;
+		ans += b7ToB0;
+		return ans;
 	}
 
 	/**
@@ -37,8 +40,28 @@ public class KNN {
 	 * @return A tensor of images
 	 */
 	public static byte[][][] parseIDXimages(byte[] data) {
-		// TODO: Implémenter
-		return null;
+		if (extractInt(data[0], data[1], data[2], data[3]) != 2051)
+			return null;
+
+		int nbImages = extractInt(data[4], data[5], data[6], data[7]);
+		int imgHeight = extractInt(data[8], data[9], data[10], data[11]);
+		int imgWidth = extractInt(data[12], data[13], data[14], data[15]);
+		
+		// int nbPixels = imgHeight * imgWidth;
+		// System.out.println(" "+nbImages+" "+imgHeight+" "+imgWidth+" "+nbPixels);
+		
+		byte[][][] images = new byte[nbImages][imgHeight][imgWidth];
+		int index = 16;
+		for (int k = 0; k < nbImages; ++k) {
+			for (int i = 0; i < imgHeight; ++i) {
+				for (int j = 0; j < imgWidth; ++j) {
+					// int index = 16 + k * nbPixels + j * imgWidth + i;
+					images[k][i][j] = (byte) (data[index] + 128);
+					++index;
+				}
+			}
+		}
+		return images;
 	}
 
 	/**
@@ -49,8 +72,15 @@ public class KNN {
 	 * @return the parsed labels
 	 */
 	public static byte[] parseIDXlabels(byte[] data) {
-		// TODO: Implémenter
-		return null;
+		if (extractInt(data[0], data[1], data[2], data[3]) != 2049)
+			return null;
+
+		int nbLabels = extractInt(data[4], data[5], data[6], data[7]);
+		byte[] labels = new byte[nbLabels];
+		for (int i = 0; i < nbLabels; ++i) {
+			labels[i] = data[i + 8];
+		}
+		return labels;
 	}
 
 	/**
