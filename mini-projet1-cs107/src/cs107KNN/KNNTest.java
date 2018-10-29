@@ -10,7 +10,7 @@ public class KNNTest {
 		//parsingTest(); // OK
 		//squaredEuclideanDistanceTest(); // OK
 		//invertedSimilarityTest(); // OK
-		//quicksortTest();
+		//quicksortTest(); // OK
 		//indexOfMaxTest();
 		//electLabelTest();
 		//knnClassifyTest();

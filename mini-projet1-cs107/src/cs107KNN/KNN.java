@@ -187,8 +187,14 @@ public class KNN {
      *         Example: values = quicksortIndices([3, 7, 0, 9]) gives [2, 0, 1, 3]
      */
     public static int[] quicksortIndices(float[] values) {
-	// TODO: Implémenter
-	return null;
+
+	int[] indices = new int[values.length];
+	for (int i = 0; i < values.length; ++i)
+	    indices[i] = i;
+
+	quicksortIndices(values, indices, 0, values.length - 1);
+
+	return indices;
     }
 
     /**
@@ -201,7 +207,23 @@ public class KNN {
      *                to sort
      */
     public static void quicksortIndices(float[] values, int[] indices, int low, int high) {
-	// TODO: Implémenter
+	int l = low, h = high;
+	float pivot = values[low];
+	while (l <= h) {
+	    if (values[l] < pivot)
+		++l;
+	    else if (values[h] > pivot)
+		--h;
+	    else {
+		swap(l, h, values, indices);
+		++l;
+		--h;
+	    }
+	}
+	if (low < h)
+	    quicksortIndices(values, indices, low, h);
+	if (high > l)
+	    quicksortIndices(values, indices, l, high);
     }
 
     /**
@@ -212,7 +234,12 @@ public class KNN {
      * @param indices the array of ints whose values are to be swapped
      */
     public static void swap(int i, int j, float[] values, int[] indices) {
-	// TODO: Implémenter
+	float tmpv = values[i];
+	values[i] = values[j];
+	values[j] = tmpv;
+	int tmpi = indices[i];
+	indices[i] = indices[j];
+	indices[j] = tmpi;
     }
 
     /**
