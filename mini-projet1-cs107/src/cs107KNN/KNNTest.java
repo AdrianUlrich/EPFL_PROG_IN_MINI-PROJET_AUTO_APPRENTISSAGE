@@ -8,8 +8,8 @@ public class KNNTest {
 		// Decommentez au fur et à mesure que vous implémentez
 		//extractIntTest(); // OK
 		//parsingTest(); // OK
-		//euclideanDistanceTest();
-		//invertedSimilarityTest();
+		//squaredEuclideanDistanceTest(); // OK
+		//invertedSimilarityTest(); // OK
 		//quicksortTest();
 		//indexOfMaxTest();
 		//electLabelTest();
