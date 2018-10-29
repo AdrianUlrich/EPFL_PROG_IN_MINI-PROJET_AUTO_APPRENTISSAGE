@@ -26,7 +26,11 @@ public class KNN {
 	 */
 	public static int extractInt(byte b31ToB24, byte b23ToB16, byte b15ToB8, byte b7ToB0) {
 		// TODO: Implémenter
-		return 0;
+		int ans = b31ToB24 << 24;
+		ans += b23ToB16 << 16;
+		ans += b15ToB8 << 8;
+		ans += b7ToB0;
+		return ans;
 	}
 
 	/**
