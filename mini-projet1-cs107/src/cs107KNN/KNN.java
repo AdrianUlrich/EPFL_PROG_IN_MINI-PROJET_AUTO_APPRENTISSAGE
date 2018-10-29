@@ -46,14 +46,18 @@ public class KNN {
 		int nbImages = extractInt(data[4], data[5], data[6], data[7]);
 		int imgHeight = extractInt(data[8], data[9], data[10], data[11]);
 		int imgWidth = extractInt(data[12], data[13], data[14], data[15]);
-		int nbPixels = imgHeight * imgWidth;
-		System.out.println(" "+nbImages+" "+imgHeight+" "+imgWidth+" "+nbPixels);
+		
+		// int nbPixels = imgHeight * imgWidth;
+		// System.out.println(" "+nbImages+" "+imgHeight+" "+imgWidth+" "+nbPixels);
+		
 		byte[][][] images = new byte[nbImages][imgHeight][imgWidth];
+		int index = 16;
 		for (int k = 0; k < nbImages; ++k) {
-			for (int i = 0; i < imgWidth; ++i) {
-				for (int j = 0; j < imgHeight; ++j) {
-					int index = 16 + k * nbPixels + j * imgWidth + i;
-					images[k][j][i] = (byte) (data[index]+128);
+			for (int i = 0; i < imgHeight; ++i) {
+				for (int j = 0; j < imgWidth; ++j) {
+					// int index = 16 + k * nbPixels + j * imgWidth + i;
+					images[k][i][j] = (byte) (data[index] + 128);
+					++index;
 				}
 			}
 		}
