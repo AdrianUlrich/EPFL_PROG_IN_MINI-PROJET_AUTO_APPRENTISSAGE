@@ -40,8 +40,24 @@ public class KNN {
 	 * @return A tensor of images
 	 */
 	public static byte[][][] parseIDXimages(byte[] data) {
-		// TODO: Implémenter
-		return null;
+		if (extractInt(data[0], data[1], data[2], data[3]) != 2051)
+			return null;
+
+		int nbImages = extractInt(data[4], data[5], data[6], data[7]);
+		int imgHeight = extractInt(data[8], data[9], data[10], data[11]);
+		int imgWidth = extractInt(data[12], data[13], data[14], data[15]);
+		int nbPixels = imgHeight * imgWidth;
+		System.out.println(" "+nbImages+" "+imgHeight+" "+imgWidth+" "+nbPixels);
+		byte[][][] images = new byte[nbImages][imgHeight][imgWidth];
+		for (int k = 0; k < nbImages; ++k) {
+			for (int i = 0; i < imgWidth; ++i) {
+				for (int j = 0; j < imgHeight; ++j) {
+					int index = 16 + k * nbPixels + j * imgWidth + i;
+					images[k][j][i] = (byte) (data[index]+128);
+				}
+			}
+		}
+		return images;
 	}
 
 	/**
@@ -58,7 +74,7 @@ public class KNN {
 		int nbLabels = extractInt(data[4], data[5], data[6], data[7]);
 		byte[] labels = new byte[nbLabels];
 		for (int i = 0; i < nbLabels; ++i) {
-			labels[i] = data[i + 7];
+			labels[i] = data[i + 8];
 		}
 		return labels;
 	}

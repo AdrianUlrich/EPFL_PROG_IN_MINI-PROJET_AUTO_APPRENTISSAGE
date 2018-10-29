@@ -6,8 +6,8 @@ public class KNNTest {
 	public static void main(String[] args) {
 		// TODO: Adapt path to data files in parsing test
 		// Decommentez au fur et à mesure que vous implémentez
-		extractIntTest();
-		//parsingTest();
+		//extractIntTest(); // OK
+		//parsingTest(); // OK
 		//euclideanDistanceTest();
 		//invertedSimilarityTest();
 		//quicksortTest();
