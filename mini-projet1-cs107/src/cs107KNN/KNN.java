@@ -250,8 +250,17 @@ public class KNN {
      * @return the index of the largest integer
      */
     public static int indexOfMax(int[] array) {
-	// TODO: Implémenter
-	return 0;
+
+	if (array.length < 1)
+	    return -1;
+	int index = 0, max = array[0];
+	for (int i = 1; i < array.length; ++i) {
+	    if (array[i] > max) {
+		max = array[i];
+		index = i;
+	    }
+	}
+	return index;
     }
 
     /**
