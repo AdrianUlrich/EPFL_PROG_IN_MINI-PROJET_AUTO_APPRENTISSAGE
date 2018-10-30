@@ -155,7 +155,8 @@ public class Helpers {
      */
     public static void show(String title, byte[][][] tensor, byte[] labels, byte[] trueLabels, int rows, int columns) {
         JFrame frame = initFrame(rows, columns, title);
-        for (int i = 0; i < Math.min(rows * columns, tensor.length); i++) {
+        int iMax = Math.min(rows * columns, tensor.length); // modified for loop max
+        for (int i = 0; i < iMax ; i++) {
             frame.add(imagePanel(toBufferedImage(tensor[i]), labels[i], trueLabels[i]));
         }
         drawFrame(frame);
