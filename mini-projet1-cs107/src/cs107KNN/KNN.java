@@ -16,9 +16,9 @@ public class KNN {
 		 * 
 		 */
 		int TESTS = 700;
-		int K = 5;
-		byte[][][] trainImages = parseIDXimages(Helpers.readBinaryFile("datasets/10-per-digit_images_train"));
-		byte[] trainLabels = parseIDXlabels(Helpers.readBinaryFile("datasets/10-per-digit_labels_train"));
+		int K = 50;
+		byte[][][] trainImages = parseIDXimages(Helpers.readBinaryFile("datasets/1000-per-digit_images_train"));
+		byte[] trainLabels = parseIDXlabels(Helpers.readBinaryFile("datasets/1000-per-digit_labels_train"));
 		byte[][][] testImages = parseIDXimages(Helpers.readBinaryFile("datasets/10k_images_test"));
 		byte[] testLabels = parseIDXlabels(Helpers.readBinaryFile("datasets/10k_labels_test"));
 		byte[] predictions = new byte[TESTS];
@@ -185,12 +185,13 @@ public class KNN {
 			}
 		}
 
-	for (int i = 0; i < iMax; ++i) {
-	    for (int j = 0; j < jMax; ++j) {
-		sumA += a[i][j];
-		sumB += b[i][j];
+		for (int i = 0; i < iMax; ++i) {
+			for (int j = 0; j < jMax; ++j) {
+				sumA += a[i][j];
+				sumB += b[i][j];
 //		++sum;
-	    }
+			}
+		}
 		return new float[] { sumA / sum, sumB / sum };
 	}
 
@@ -210,11 +211,7 @@ public class KNN {
 		for (int i = 0; i < values.length; ++i)
 			indices[i] = i;
 
-	int[] indices = new int[values.length];
-	for (int i = 0; i < values.length; ++i)
-
-	    indices[i] = i;
-	quicksortIndices(values, indices, 0, values.length - 1);
+		quicksortIndices(values, indices, 0, values.length - 1);
 		return indices;
 	}
 
@@ -302,47 +299,47 @@ public class KNN {
 		return (byte) indexOfMax(votes);
 	}
 
-    /**
-     * Classifies the symbol drawn on the provided image
-     *
-     * @param image       the image to classify
-     * @param trainImages the tensor of training images
-     * @param trainLabels the list of labels corresponding to the training images
-     * @param k           the number of voters in the election process
-     *
-     * @return the label of the image
-     */
-    public static byte knnClassify(byte[][] image, byte[][][] trainImages, byte[] trainLabels, int k) {
-	// TODO: Implémenter
+	/**
+	 * Classifies the symbol drawn on the provided image
+	 *
+	 * @param image       the image to classify
+	 * @param trainImages the tensor of training images
+	 * @param trainLabels the list of labels corresponding to the training images
+	 * @param k           the number of voters in the election process
+	 *
+	 * @return the label of the image
+	 */
+	public static byte knnClassify(byte[][] image, byte[][][] trainImages, byte[] trainLabels, int k) {
+		// TODO: Implémenter
 
-	float[] distances = new float[trainImages.length];
-	for (int i = 0; i < trainImages.length; ++i) {
-	    distances[i] = invertedSimilarity(image, trainImages[i]);
+		float[] distances = new float[trainImages.length];
+		for (int i = 0; i < trainImages.length; ++i) {
+			distances[i] = invertedSimilarity(image, trainImages[i]);
 //	    distances[i] = squaredEuclideanDistance(image, trainImages[i]);
+		}
+
+		int[] distanceIndices = quicksortIndices(distances);
+
+		return electLabel(distanceIndices, trainLabels, k);
 	}
 
-	int[] distanceIndices = quicksortIndices(distances);
+	/**
+	 * Computes accuracy between two arrays of predictions
+	 * 
+	 * @param predictedLabels the array of labels predicted by the algorithm
+	 * @param trueLabels      the array of true labels
+	 * 
+	 * @return the accuracy of the predictions. Its value is in [0, 1]
+	 */
+	public static double accuracy(byte[] predictedLabels, byte[] trueLabels) {
 
-	return electLabel(distanceIndices, trainLabels, k);
-    }
-
-    /**
-     * Computes accuracy between two arrays of predictions
-     * 
-     * @param predictedLabels the array of labels predicted by the algorithm
-     * @param trueLabels      the array of true labels
-     * 
-     * @return the accuracy of the predictions. Its value is in [0, 1]
-     */
-    public static double accuracy(byte[] predictedLabels, byte[] trueLabels) {
-
-	int n = predictedLabels.length;
-	if (n != trueLabels.length || n == 0)
-	    return -1d;
-	int successes = 0;
-	for (int i = 0; i < n; ++i)
-	    if (predictedLabels[i] == trueLabels[i])
-		++successes;
-	return successes / (float) n;
-    }
+		int n = predictedLabels.length;
+		if (n != trueLabels.length || n == 0)
+			return -1d;
+		int successes = 0;
+		for (int i = 0; i < n; ++i)
+			if (predictedLabels[i] == trueLabels[i])
+				++successes;
+		return successes / (float) n;
+	}
 }
