@@ -169,7 +169,7 @@ public class KNN {
 	    for (int j = 0; j < jMax; ++j) {
 		sumA += a[i][j];
 		sumB += b[i][j];
-		// ++sum;
+//		++sum;
 	    }
 	}
 
@@ -190,8 +190,8 @@ public class KNN {
 
 	int[] indices = new int[values.length];
 	for (int i = 0; i < values.length; ++i)
-	    indices[i] = i;
 
+	    indices[i] = i;
 	quicksortIndices(values, indices, 0, values.length - 1);
 
 	return indices;
@@ -293,7 +293,16 @@ public class KNN {
      */
     public static byte knnClassify(byte[][] image, byte[][][] trainImages, byte[] trainLabels, int k) {
 	// TODO: Implémenter
-	return 0;
+
+	float[] distances = new float[trainImages.length];
+	for (int i = 0; i < trainImages.length; ++i) {
+	    distances[i] = invertedSimilarity(image, trainImages[i]);
+//	    distances[i] = squaredEuclideanDistance(image, trainImages[i]);
+	}
+
+	int[] distanceIndices = quicksortIndices(distances);
+
+	return electLabel(distanceIndices, trainLabels, k);
     }
 
     /**
@@ -305,7 +314,14 @@ public class KNN {
      * @return the accuracy of the predictions. Its value is in [0, 1]
      */
     public static double accuracy(byte[] predictedLabels, byte[] trueLabels) {
-	// TODO: Implémenter
-	return 0d;
+
+	int n = predictedLabels.length;
+	if (n != trueLabels.length || n == 0)
+	    return -1d;
+	int successes = 0;
+	for (int i = 0; i < n; ++i)
+	    if (predictedLabels[i] == trueLabels[i])
+		++successes;
+	return successes / (float) n;
     }
 }
