@@ -12,7 +12,7 @@ public class KNNTest {
 		//invertedSimilarityTest(); // OK
 		//quicksortTest(); // OK
 		//indexOfMaxTest(); // OK
-		//electLabelTest();
+		//electLabelTest(); // OK
 		//knnClassifyTest();
 		//accuracyTest();
 	}

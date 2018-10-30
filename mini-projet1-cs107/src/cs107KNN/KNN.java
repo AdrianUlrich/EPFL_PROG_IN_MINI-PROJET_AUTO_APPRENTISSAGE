@@ -273,8 +273,12 @@ public class KNN {
      * @return the winner of the election
      */
     public static byte electLabel(int[] sortedIndices, byte[] labels, int k) {
-	// TODO: Implémenter
-	return 0;
+
+	int[] votes = new int[10];
+	for (int i = 0; i < k; ++i)
+	    ++votes[labels[sortedIndices[i]]];
+
+	return (byte) indexOfMax(votes);
     }
 
     /**
