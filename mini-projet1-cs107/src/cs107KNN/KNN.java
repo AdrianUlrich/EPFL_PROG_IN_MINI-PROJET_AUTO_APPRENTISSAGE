@@ -17,8 +17,8 @@ public class KNN {
 	 */
 	int TESTS = 700;
 	int K = 3;
-	byte[][][] trainImages = parseIDXimages(Helpers.readBinaryFile("datasets/1000-per-digit_images_train"));
-	byte[] trainLabels = parseIDXlabels(Helpers.readBinaryFile("datasets/1000-per-digit_labels_train"));
+	byte[][][] trainImages = parseIDXimages(Helpers.readBinaryFile("datasets/5000-per-digit_images_train"));
+	byte[] trainLabels = parseIDXlabels(Helpers.readBinaryFile("datasets/5000-per-digit_labels_train"));
 	byte[][][] testImages = parseIDXimages(Helpers.readBinaryFile("datasets/10k_images_test"));
 	byte[] testLabels = parseIDXlabels(Helpers.readBinaryFile("datasets/10k_labels_test"));
 	byte[] predictions = new byte[TESTS];
@@ -26,7 +26,6 @@ public class KNN {
 	    predictions[i] = knnClassify(testImages[i], trainImages, trainLabels, K);
 	}
 	Helpers.show("Test", testImages, predictions, testLabels, 14, 12);
-
     }
 
     /**
@@ -37,13 +36,17 @@ public class KNN {
      * @return the integer having form [ b31ToB24 | b23ToB16 | b15ToB8 | b7ToB0 ]
      */
     public static int extractInt(byte b31ToB24, byte b23ToB16, byte b15ToB8, byte b7ToB0) {
-	int ans = b31ToB24 << 24;
-	ans += b23ToB16 << 16;
-	ans += b15ToB8 << 8;
-	ans += b7ToB0;
+	int ans = interpretByteAsUnsigned(b31ToB24)<< 24;
+	ans += interpretByteAsUnsigned(b23ToB16) << 16;
+	ans += interpretByteAsUnsigned(b15ToB8) << 8;
+	ans += interpretByteAsUnsigned(b7ToB0);
 	return ans;
     }
-
+    
+    private static int interpretByteAsUnsigned(byte b) {
+    	return (b < 0 ? (~b + 1) : b);
+    }
+    
     /**
      * Parses an IDX file containing images
      *
@@ -313,8 +316,8 @@ public class KNN {
 
 	float[] distances = new float[trainImages.length];
 	for (int i = 0; i < trainImages.length; ++i) {
-	    distances[i] = invertedSimilarity(image, trainImages[i]);
-//	    distances[i] = squaredEuclideanDistance(image, trainImages[i]);
+	   // distances[i] = invertedSimilarity(image, trainImages[i]);
+	    distances[i] = squaredEuclideanDistance(image, trainImages[i]);
 	}
 
 	int[] distanceIndices = quicksortIndices(distances);
